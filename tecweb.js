@@ -1,18 +1,27 @@
 var express = require ('express');
 var app = express();
 
-app.get('/aplicativo',function(req,res){
-    res.send('Aplicativo Exemplo!');
+app.use(express.json());
+
+app.post("/patinete",(req, resp)=>{
+    var patinete = req.body;
+    console.log(JSON.stringify(patinete));
 });
-app.get('/html', function(req,res){
-    res.send('<html><title>Hello World!</title><body>Lista 03 – Tecnologias Web</body></html>');
+
+app.get("/patinete/:patineteId",(req,resp) =>{
+    var patineteId = req.params.patineteId;
+    console.log("Get - patineteID" +  patineteId );    
 });
-app.post('/imagens', function(req,res){
-    res.send("Imagem 1 – Imagem 2 – Imagem3");
+
+app.put("/patinete/:patineteId",(req,resp) =>{
+    var patineteId = req.params.patineteId;
+    console.log("PUT - patineteID" +  patineteId );    
 });
-app.delete('/clientes/10', function(req,res){
-    res.send("Cliente número 10 removido com sucesso");
+
+app.delete("/patinete/:patineteId",(req,resp) =>{
+    var patineteId = req.params.patineteId;
+    console.log("DELETE - patineteID" +  patineteId );    
 });
-app.listen(3000,function(){
-    console.log('Example app listening on port 3000!');
+app.listen(3000,() =>{
+    console.log('TecPatinete - Porta 3000:')
 });
