@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DialogLoginComponent } from './dialog-login.component';
+import { PatineteComponent } from './patinete.component';
 
-describe('DialogLoginComponent', () => {
-  let component: DialogLoginComponent;
-  let fixture: ComponentFixture<DialogLoginComponent>;
+describe('PatineteComponent', () => {
+  let component: PatineteComponent;
+  let fixture: ComponentFixture<PatineteComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ DialogLoginComponent ]
+      declarations: [ PatineteComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(DialogLoginComponent);
+    fixture = TestBed.createComponent(PatineteComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

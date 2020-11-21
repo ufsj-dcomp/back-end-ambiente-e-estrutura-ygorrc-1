@@ -9,11 +9,20 @@ import { MatButtonModule} from "@angular/material/button";
 import { MatIconModule} from "@angular/material/icon";
 import { MatDialogModule} from "@angular/material/dialog";
 import { DialogLoginComponent } from './dialog-login/dialog-login.component';
+import { UsuarioComponent } from './usuario/usuario.component';
+import { CadastroComponent } from './cadastro/cadastro.component';
+import { MatTableModule} from '@angular/material/table';
+import { PatineteComponent } from './patinete/patinete.component';
+import { HttpClientModule } from '@angular/common/http';
 @NgModule({
   declarations: [
     AppComponent,
-    DialogLoginComponent
+    DialogLoginComponent,
+    UsuarioComponent,
+    CadastroComponent,
+    PatineteComponent,
   ],
+  entryComponents:[DialogLoginComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -21,7 +30,9 @@ import { DialogLoginComponent } from './dialog-login/dialog-login.component';
     MatButtonModule,
     MatIconModule,
     MatDialogModule,
-    NoopAnimationsModule
+    MatTableModule,
+    NoopAnimationsModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]

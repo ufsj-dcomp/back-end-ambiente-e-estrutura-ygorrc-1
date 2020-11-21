@@ -1,4 +1,5 @@
 var express = require ('express');
+var cors = require('cors');
 var app = express();
 
 var mysql = require("mysql");
@@ -8,8 +9,22 @@ var connection = mysql.createConnection({
     password: "Ufsj2010!!",
     database: "patinetebase"
 });
+app.use(cors());
 app.use(express.json());
 
+app.get("/usuario",(req,resp) =>{
+    var usuarioId = req.params.usuarioId;
+    console.log("GET - usuario"); 
+    connection.query("SELECT * FROM usuario",(err, result) =>{
+        if(err){
+            console.log(err);
+            resp.status(500).end();
+        }else{
+            resp.status(200);
+            resp.json(result);
+        }
+    });  
+});
 app.post("/patinete",(req, resp)=>{
     var patinete = req.body;
     console.log("POST - patinete");
@@ -24,11 +39,39 @@ app.post("/patinete",(req, resp)=>{
     });
 
 });
+//usuario post
+app.post("/usuario",(req, resp)=>{
+    var usuario = req.body;
+    console.log("POST - usuario");
+    connection.query("INSERT INTO usuario SET ?",[usuario],(err, result) =>{
+        if(err){
+            console.log(err);
+            resp.status(500).end();
+        }else{
+            resp.status(200);
+            resp.json(result);
+        }
+    });
 
+});
 app.get("/patinete/:patineteId",(req,resp) =>{
     var patineteId = req.params.patineteId;
     console.log("GET - patineteID" +  patineteId ); 
     connection.query("SELECT * FROM patinete WHERE id = ?",[patineteId],(err, result) =>{
+        if(err){
+            console.log(err);
+            resp.status(500).end();
+        }else{
+            resp.status(200);
+            resp.json(result);
+        }
+    });  
+});
+//usuario
+app.get("/usuario/:usuarioId",(req,resp) =>{
+    var patineteId = req.params.usuarioId;
+    console.log("GET - usuarioID" +  usuarioId ); 
+    connection.query("SELECT * FROM patinete WHERE id = ?",[usuarioId],(err, result) =>{
         if(err){
             console.log(err);
             resp.status(500).end();

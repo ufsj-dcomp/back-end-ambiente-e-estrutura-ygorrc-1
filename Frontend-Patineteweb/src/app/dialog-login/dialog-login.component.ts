@@ -1,31 +1,15 @@
-import { Component, Inject } from '@angular/core';
-import {MatDialog, MAT_DIALOG_DATA} from '@angular/material/dialog';
+import { Component, OnInit } from '@angular/core';
 
-export interface DialogLogin{
-  animal: 'panda' | 'unicorn' | 'lion';
-}
 @Component({
-  selector: 'dialog-login',
+  selector: 'app-dialog-login',
   templateUrl: './dialog-login.component.html',
   styleUrls: ['./dialog-login.component.css']
 })
-export class DialogLoginComponent{
+export class DialogLoginComponent implements OnInit {
 
-  constructor(public dialog: MatDialog) { }
+  constructor() { }
 
-  openDialog(){
-    this.dialog.open(DialogDataExampleDialog, {
-      data: {
-        animal: 'panda'
-      }
-    })
+  ngOnInit(): void {
   }
 
-}
-@Component({
-  selector: 'dialog-login.component',
-  templateUrl: 'dialog-login.component.html',
-})
-export class DialogDataExampleDialog {
-  constructor(@Inject(MAT_DIALOG_DATA) public data: DialogLogin) {}
 }
