@@ -25,6 +25,19 @@ app.get("/usuario",(req,resp) =>{
         }
     });  
 });
+app.get("/patinete",(req,resp) =>{
+    var patineteId = req.params.patineteId;
+    console.log("GET - patinete"); 
+    connection.query("SELECT * FROM patinete",(err, result) =>{
+        if(err){
+            console.log(err);
+            resp.status(500).end();
+        }else{
+            resp.status(200);
+            resp.json(result);
+        }
+    });  
+});
 app.post("/patinete",(req, resp)=>{
     var patinete = req.body;
     console.log("POST - patinete");
@@ -34,7 +47,7 @@ app.post("/patinete",(req, resp)=>{
             resp.status(500).end();
         }else{
             resp.status(200);
-            resp.json(result);
+            resp.json(result.isertedId);
         }
     });
 
@@ -81,16 +94,35 @@ app.get("/usuario/:usuarioId",(req,resp) =>{
         }
     });  
 });
-
 app.put("/patinete/:patineteId",(req,resp) =>{
     var patineteId = req.params.patineteId;
-    console.log("PUT - patineteID" +  patineteId );    
+    var patinete = req.corpo;
+    console.log("PUT - patineteID" +  patineteId ); 
+    connection.query("UPDATE patinete SET? WHERE id = ?",[patinete,patineteId],(err, result) =>{
+        if(err){
+            console.log(err);
+            resp.status(500).end();
+        }else{
+            resp.status(200);
+        }
+    });  
 });
+app.delete ( "/patinete/:patineteId" ,  ( req ,  resp )  =>  {
+    var  patineteId  =  req . params . culturaId ;
+    var  patinete  =  req . corpo ;
+    console . log ( "DELETE - patineteId"  +  patineteId ) ;
 
-app.delete("/patinete/:patineteId",(req,resp) =>{
-    var patineteId = req.params.patineteId;
-    console.log("DELETE - patineteID" +  patineteId );    
-});
+    conexão . query ( "Delete FROM patinete WHERE id =?" ,  [ patinteId ] ,  ( err ,  resultado )  =>  {
+        if  ( err )  {
+            console . log ( err ) ;
+            resp . status ( 500 ) . end ( ) ;
+        }  else  {
+            resp . status ( 200 ) ;
+            resp . json ( resultado ) ;
+        }
+    } ) ;
+
+} ) ;
 app.listen(3000,() =>{
     console.log('TecPatinete - Porta 3000:')
 });
