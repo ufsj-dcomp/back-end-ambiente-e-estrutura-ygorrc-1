@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { UsuarioService } from '../usuario.service';
 
-export class Usuario{
+export class User{
   id : number;
   nome: string;
   email: string;
@@ -9,7 +9,7 @@ export class Usuario{
   saldo: number;
 
 }
-const USUARIOS: Usuario[] = [
+const USUARIOS: User[] = [
   {id:1 , nome:'ygor' , email: 'ygormagalhaesrc@gmail.com' , senha:'12345' , saldo:0},
   {id:2 , nome:'naldo' , email: 'naldo@gmail.com', senha:'Uf21' , saldo:10.3}
 

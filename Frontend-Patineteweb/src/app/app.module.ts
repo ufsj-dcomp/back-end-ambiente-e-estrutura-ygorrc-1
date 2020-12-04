@@ -18,14 +18,20 @@ import {MatSelectModule} from '@angular/material/select';
 import { from } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule} from '@angular/material/input'
+import { MatInputModule} from '@angular/material/input';
+import { HomeComponent } from './home/home.component';
+import { AuthComponent } from './auth/auth.component'
+import { AuthGuard } from './auth/auth.guard';
+import { Globals } from './globals/globals';
 @NgModule({
   declarations: [
     AppComponent,
     UsuarioComponent,
     CadastroComponent,
     PatineteComponent,
-    MngPatineteDialog
+    MngPatineteDialog,
+    HomeComponent,
+    AuthComponent
   ],
   entryComponents:[
     MngPatineteDialog
@@ -46,7 +52,7 @@ import { MatInputModule} from '@angular/material/input'
     MatFormFieldModule
 
   ],
-  providers: [],
+  providers: [AuthGuard,Globals],
   bootstrap: [AppComponent],
 })
 export class AppModule { }

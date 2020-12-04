@@ -1,5 +1,6 @@
 var express = require ('express');
 var cors = require('cors');
+var jwt = require('jsonwebtoken');
 var app = express();
 
 var mysql = require("mysql");
@@ -12,6 +13,36 @@ var connection = mysql.createConnection({
 app.use(cors());
 app.use(express.json());
 
+app.post("/auth",(req,resp) =>{
+    var user = req.body;
+    console.log("AUTH - usuario" + req.body); 
+    connection.query("SELECT * FROM usuario WHERE email = ? and senha = ? ",[user.email,user.senha],(err, result) =>{
+        var usuario = result[0];
+        if(result.length == 0){
+            resp.status(401);
+            resp.send({token: null,usuario: usuario,success: false});
+        }else{
+            let token = jwt.sign({id: usuario.email},'patineteweb',{expiresIn:6000});
+            resp.status(200);
+            resp.send({token: token,usuario: usuario,success: true});
+        }
+        
+    });  
+});
+verifica_token = (req, resp, next) =>{
+    var token = req.headers['x-access-token'];
+
+    if(!token){
+        return resp.status(401).end();
+    }
+    jwt.verify(token,'patineteweb',(err,docoded) =>{
+        if(err)
+            return resp.status(401).end();
+        
+        req.usario = docoded.id;
+        next();
+    })
+}
 app.get("/usuario",(req,resp) =>{
     var usuarioId = req.params.usuarioId;
     console.log("GET - usuario"); 
@@ -25,7 +56,7 @@ app.get("/usuario",(req,resp) =>{
         }
     });  
 });
-app.get("/patinete",(req,resp) =>{
+app.get("/patinete",verifica_token,(req,resp) =>{
     var patineteId = req.params.patineteId;
     console.log("GET - patinete"); 
     connection.query("SELECT * FROM patinete",(err, result) =>{
@@ -34,11 +65,11 @@ app.get("/patinete",(req,resp) =>{
             resp.status(500).end();
         }else{
             resp.status(200);
-            resp.json(result);
+            resp.json(result).end();
         }
     });  
 });
-app.post("/patinete",(req, resp)=>{
+app.post("/patinete",verifica_token,(req, resp)=>{
     var patinete = req.body;
     console.log("POST - patinete");
     connection.query("INSERT INTO patinete SET ?",[patinete],(err, result) =>{
@@ -47,7 +78,7 @@ app.post("/patinete",(req, resp)=>{
             resp.status(500).end();
         }else{
             resp.status(200);
-            resp.json(result.isertedId);
+            resp.json(result.isertedId).end();
         }
     });
 
@@ -62,12 +93,12 @@ app.post("/usuario",(req, resp)=>{
             resp.status(500).end();
         }else{
             resp.status(200);
-            resp.json(result);
+            resp.json(result).end();
         }
     });
 
 });
-app.get("/patinete/:patineteId",(req,resp) =>{
+app.get("/patinete/:patineteId",verifica_token,(req,resp) =>{
     var patineteId = req.params.patineteId;
     console.log("GET - patineteID" +  patineteId ); 
     connection.query("SELECT * FROM patinete WHERE id = ?",[patineteId],(err, result) =>{
@@ -76,7 +107,7 @@ app.get("/patinete/:patineteId",(req,resp) =>{
             resp.status(500).end();
         }else{
             resp.status(200);
-            resp.json(result);
+            resp.json(result).end;
         }
     });  
 });
@@ -90,35 +121,35 @@ app.get("/usuario/:usuarioId",(req,resp) =>{
             resp.status(500).end();
         }else{
             resp.status(200);
-            resp.json(result);
+            resp.json(result).end();
         }
     });  
 });
-app.put("/patinete/:patineteId",(req,resp) =>{
+app.put("/patinete/:patineteId",verifica_token,(req,resp) =>{
     var patineteId = req.params.patineteId;
-    var patinete = req.corpo;
-    console.log("PUT - patineteID" +  patineteId ); 
-    connection.query("UPDATE patinete SET? WHERE id = ?",[patinete,patineteId],(err, result) =>{
+    var patinete = req.body;
+    console.log("PUT - patineteID " +  patineteId ); 
+    connection.query("UPDATE patinete SET ? WHERE id = ?",[patinete,patineteId],(err, result) =>{
         if(err){
             console.log(err);
             resp.status(500).end();
         }else{
             resp.status(200);
+            resp.json(result).end;
         }
     });  
 });
-app.delete ( "/patinete/:patineteId" ,  ( req ,  resp )  =>  {
-    var  patineteId  =  req . params . culturaId ;
-    var  patinete  =  req . corpo ;
-    console . log ( "DELETE - patineteId"  +  patineteId ) ;
+app.delete( "/patinete/:patineteId" ,verifica_token, (req, resp )  =>  {
+    var  patineteId  =  req.params.patineteId ;
+    console.log ( "DELETE - patineteId "  +  patineteId ) ;
 
-    conexão . query ( "Delete FROM patinete WHERE id =?" ,  [ patinteId ] ,  ( err ,  resultado )  =>  {
-        if  ( err )  {
-            console . log ( err ) ;
-            resp . status ( 500 ) . end ( ) ;
+    connection.query ( "DELETE FROM patinete WHERE id = ?" ,  [ patineteId ] ,  ( err ,  result )  =>  {
+        if  (err)  {
+            console.log (err);
+            resp.status(500).end() ;
         }  else  {
-            resp . status ( 200 ) ;
-            resp . json ( resultado ) ;
+            resp.status ( 200 ) ;
+            resp.json(result).end;
         }
     } ) ;
 
